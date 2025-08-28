@@ -23,7 +23,7 @@ cap = cv2.VideoCapture(0)
 # Aumentar qualidade da câmera
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 540)
-cap.set(cv2.CAP_PROP_FPS, 30)
+cap.set(cv2.CAP_PROP_FPS, 60)
 
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
