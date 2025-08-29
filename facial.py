@@ -19,12 +19,6 @@ if not os.path.exists(csv_file):
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 cap = cv2.VideoCapture(0)
-
-# Aumentar qualidade da câmera
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 540)
-cap.set(cv2.CAP_PROP_FPS, 60)
-
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
 
@@ -145,7 +139,7 @@ while True:
     cv2.putText(frame, status_text, (10, frame_height - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
-    cv2.imshow("Detecção Facial com Alta Qualidade", frame)
+    cv2.imshow("Detecção Facial com Interface Estável", frame)
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):

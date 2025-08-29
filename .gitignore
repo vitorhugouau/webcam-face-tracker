@@ -1,2 +1,10 @@
 /fotos
 /videos
+.idea/
+logs
+facepics
+led / optimized / DLL files
+__pycache__/
+*$py.class
+videos
+fotos

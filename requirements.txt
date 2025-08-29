@@ -1,0 +1,8 @@
+numba
+numpy
+opencv-contrib-python
+tensorflow==1.15
+scipy
+imutils
+filterpy
+mtcnn
