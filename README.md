@@ -19,7 +19,7 @@ Real-time face detection and tracking via webcam—with smart event-based video 
 
 ###  Prerequisites
 
-- Python 3.7+ installed
+- Python 3.11+ installed
 - Webcam access enabled
 - GPU recommended but not mandatory (for TensorFlow/numba performance)
 
