@@ -1,8 +1,3 @@
-"""
-SORT-like data association module with Hungarian algorithm (linear assignment)
-Computes IoU between detected boxes and tracker predictions, then matches them.
-"""
-
 import numpy as np
 from numba import jit
 from scipy.optimize import linear_sum_assignment
@@ -10,9 +5,7 @@ from scipy.optimize import linear_sum_assignment
 
 @jit(nopython=True)
 def iou(bb_test, bb_gt):
-    """
-    Computes IoU between two bboxes in the form [x1, y1, x2, y2]
-    """
+   
     xx1 = max(bb_test[0], bb_gt[0])
     yy1 = max(bb_test[1], bb_gt[1])
     xx2 = min(bb_test[2], bb_gt[2])
@@ -26,14 +19,7 @@ def iou(bb_test, bb_gt):
 
 
 def associate_detections_to_trackers(detections, trackers, iou_threshold=0.25):
-    """
-    Assigns detections to tracked objects (both as bounding boxes).
-
-    Returns:
-        matches: array of shape (N, 2) with detection index and tracker index
-        unmatched_detections: array of detection indices not matched
-        unmatched_trackers: array of tracker indices not matched
-    """
+   
     if len(trackers) == 0:
         return np.empty((0, 2), dtype=int), np.arange(len(detections)), np.empty((0,), dtype=int)
 
@@ -42,7 +28,6 @@ def associate_detections_to_trackers(detections, trackers, iou_threshold=0.25):
         for t, trk in enumerate(trackers):
             iou_matrix[d, t] = iou(det, trk)
 
-    # Hungarian algorithm (maximize IoU)
     row_ind, col_ind = linear_sum_assignment(-iou_matrix)
 
     matches = []

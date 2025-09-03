@@ -5,11 +5,9 @@ import numpy as np
 import csv
 from datetime import datetime
 
-# Pastas para salvar arquivos
 os.makedirs("videos", exist_ok=True)
 os.makedirs("fotos", exist_ok=True)
 
-# CSV de log
 csv_file = "log_rosto.csv"
 if not os.path.exists(csv_file):
     with open(csv_file, mode='w', newline='') as file:
@@ -31,10 +29,9 @@ ultima_gravacao = 0
 maiores_rostos = {}
 detecção_ativa = False
 
-# IDs e rastreadores CSRT
 next_id = 1
-rosto_ids = {}        # id_rosto -> (x, y, w, h)
-rastreadores = {}     # id_rosto -> cv2.TrackerCSRT
+rosto_ids = {}       
+rastreadores = {}     
 id_count = {}
 
 def log_rosto(video_name, id_rosto, foto_name):
@@ -48,7 +45,6 @@ while True:
     if not ret:
         break
 
-    # Atualiza posições usando rastreadores existentes
     ids_para_remover = []
     for id_rosto, rast in rastreadores.items():
         ok, bbox = rast.update(frame)
@@ -56,18 +52,17 @@ while True:
             x, y, w, h = [int(v) for v in bbox]
             rosto_ids[id_rosto] = (x, y, w, h)
         else:
-            ids_para_remover.append(id_rosto)  # perdeu o rosto
+            ids_para_remover.append(id_rosto)  
 
     for id_rosto in ids_para_remover:
         del rastreadores[id_rosto]
         del rosto_ids[id_rosto]
 
-    # Detecta novos rostos
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     for (x, y, w, h) in faces:
-        # Verifica se já existe rastreador próximo
+
         encontrado = False
         cx, cy = x + w//2, y + h//2
         for id_rosto, (rx, ry, rw, rh) in rosto_ids.items():
@@ -83,7 +78,6 @@ while True:
             rosto_ids[next_id] = (x, y, w, h)
             next_id += 1
 
-    # Decide se grava
     if detecção_ativa and len(rosto_ids) > 0:
         if not gravando and not rosto_presente and (time.time() - ultima_gravacao >= 4):
             video_filename = os.path.join("videos", f"video{video_count}.mp4")
@@ -122,7 +116,6 @@ while True:
             out.release()
             print(f"✅ Gravação finalizada: {video_filename}")
 
-            # Salva fotos e log CSV
             for id_rosto, (area, rosto_cortado) in maiores_rostos.items():
                 foto_filename = os.path.join("fotos", f"foto{video_count}_ID{id_rosto}.jpg")
                 cv2.imwrite(foto_filename, rosto_cortado)
@@ -134,7 +127,6 @@ while True:
             ultima_gravacao = time.time()
             video_count += 1
 
-    # Mostra status de detecção na tela
     status_text = "Detecção: ON" if detecção_ativa else "Detecção: OFF"
     cv2.putText(frame, status_text, (10, frame_height - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
